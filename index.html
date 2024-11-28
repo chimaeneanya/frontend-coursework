@@ -509,6 +509,13 @@
 				});
 			},
 		},
-		
+		watch: {
+			// Watch formData and validate the form when changes occur
+			formData: {
+				handler: "validateForm",
+				deep: true
+			}
+		},
+		// Fetch products when the app is mounted
 	}).mount('#app');
 </script>
