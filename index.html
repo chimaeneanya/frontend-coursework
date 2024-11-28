@@ -383,6 +383,96 @@
 				formIsValid: false // Track form validity
 			};
 		},
+		methods: {
+			// Fetch products from the backend
+			async fetchProducts() {
+				try {
+					const response = await fetch('http://localhost:5000/api/products');
+					if (!response.ok) {
+						throw new Error(`Server error: ${response.status} ${response.statusText}`);
+					}
+					this.products = await response.json();
+				} catch (error) {
+					console.error('Failed to fetch products:', error);
+					alert('Unable to fetch products. Please try again later.');
+				}
+			},
+			showCart() {
+				this.showProduct = !this.showProduct;
+			},
+			toggleLove(product) {
+				// Toggle the love state for this specific product
+				product.unshowLove = !product.unshowLove;
+			},
+			addToCart(product) {
+				this.cart.push(product); // Push the entire product object to cart
+			},
+			itemsLimit(product) {
+				return product.spaces > this.cartCount(product.id);
+			},
+			removeFromCart(index) {
+				this.cart.splice(index, 1); // Remove item by index from cart
+			},
+			cartCount(productId) {
+				return this.cart.filter(item => item.id === productId).length;
+			},
+			itemsLeft(product) {
+				return product.spaces - this.cartCount(product.id);
+			},
+			// Place an order and send it to the backend
+			async placeOrder() {
+				if (this.formIsValid && this.cart.length > 0) {
+					const orders = {
+						customer: this.formData,
+						items: this.cart,
+						total: this.total
+					};
+					console.log('Order data being sent:', orders); // Log for debugging
+					try {
+						const response = await fetch('http://localhost:5000/api/orders', {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify(orders)
+						});
+
+						console.log('Response:', response); // Log response details
+
+						if (!response.ok) {
+							throw new Error(`Server error: ${response.status} ${response.statusText}`);
+						}
+
+						const result = await response.json();
+						if (result.success) {
+							alert(result.message);
+							this.cart = []; // Clear the cart after a successful order
+							setTimeout(() => {
+								location.reload();
+							}, 100);
+						} else {
+							alert(`Failed to place order: ${result.message || 'Unknown error'}`);
+						}
+					} catch (error) {
+						console.error('Failed to place order:', error);
+						alert('Unable to place order. Please try again later.');
+					}
+				} else {
+					alert('Please fill all form fields or add items to the cart.');
+				}
+			},
+			// Validate checkout form
+			validateForm() {
+				this.formIsValid =
+					this.formData.name.trim() ;
+					// this.formData.email.trim();
+				// this.formData.mobile.trim() &&
+				// this.formData.postalCode.trim() &&
+				// this.formData.cardNumber.trim() &&
+				// this.formData.expiryMonth.trim() &&
+				// this.formData.expiryYear.trim() &&
+				// this.formData.cvv.trim() &&
+				// this.formData.cardName.trim();
+			}
+		},
 		
 	}).mount('#app');
 </script>
