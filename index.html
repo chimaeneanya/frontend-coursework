@@ -211,5 +211,144 @@
 		</section>
 	</main>
 	<!--  MAIN CONTENT END  -->
+
+    <!--  MAIN CHECKOUT CONTENT START  -->
+	<main v-else>
+
+		<!-- 
+     Page Banner START -->
+		<section class="py-0">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="bg-light p-4 text-center rounded-3">
+							<h1 class="m-0">Checkout</h1>
+							<!-- Breadcrumb -->
+							<div class="d-flex justify-content-center">
+								<nav aria-label="breadcrumb">
+									<ol class="breadcrumb breadcrumb-dots mb-0">
+										<li class="breadcrumb-item"><a href="index.html">Home</a></li>
+										<li class="breadcrumb-item active" aria-current="page"><a href="#">Checkout</a>
+										</li>
+
+									</ol>
+								</nav>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- 
+     Page Banner END -->
+
+		<!-- 
+     Page content START -->
+		<section class="pt-5">
+			<div class="container">
+
+				<div class="row g-4 g-sm-5">
+					<!-- Main content START -->
+					<div class="col-xl-8 mb-4 mb-sm-0">
+						<!-- Personal info START -->
+						<div class="card card-body shadow p-4">
+							<!-- Title -->
+							<h5 class="mb-0">Personal Details</h5>
+
+							<!-- Form START -->
+							<form class="row g-3 mt-0">
+								<!-- Name -->
+								<div class="col-md-6 bg-light-input">
+									<label for="yourName" class="form-label">Your name *</label>
+									<input type="text" class="form-control" id="yourName" v-model="formData.name"
+										placeholder="Name">
+								</div>
+								<!-- Email -->
+
+								<!-- Mobile number -->
+								<div class="col-md-6 bg-light-input">
+									<label for="mobileNumber" class="form-label">Mobile number *</label>
+									<input type="number" class="form-control" id="mobileNumber"
+										v-model="formData.mobile" placeholder="Mobile number">
+								</div>
+
+							</form>
+							<!-- Form END -->
+
+
+
+						</div>
+						<!-- Personal info END -->
+					</div>
+					<!-- Main content END -->
+
+					<!-- Right sidebar START -->
+					<div class="col-xl-4">
+						<div class="row mb-0">
+							<div class="col-md-6 col-xl-12">
+								<div class="card card-body shadow p-4 mb-4">
+									<!-- Title -->
+									<h4 class="mb-4">Order Summary</h4>
+
+									<!-- Loop through each item in the cart array -->
+									<div v-for="(product, index) in cart" :key="product.id" class="row g-3 mb-3">
+										<!-- Image -->
+										<div class="col-sm-4">
+											<img class="rounded" :src="product.image" alt="Course Image">
+										</div>
+										<!-- Info -->
+										<div class="col-sm-8">
+											<h6 class="mb-0"><a href="#">{{ product.title }}</a></h6>
+											<!-- Info -->
+											<div class="d-flex justify-content-between align-items-center mt-3">
+												<!-- Price -->
+												<span class="text-success">${{ product.price }}</span>
+
+												<!-- Remove button -->
+												<div class="text-primary-hover">
+													<a href="#" class="text-body me-2"
+														@click.prevent="removeFromCart(index)">
+														<i class="bi bi-trash me-1"></i>Remove
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- Course item END -->
+
+									<hr> <!-- Divider -->
+
+									<!-- Price and detail -->
+									<ul class="list-group list-group-borderless mb-2">
+										<li class="list-group-item px-0 d-flex justify-content-between">
+											<span class="h6 fw-light mb-0">Total Items</span>
+											<span class="h6 fw-light mb-0">{{ cart.length }}</span>
+										</li>
+										<li class="list-group-item px-0 d-flex justify-content-between">
+											<span class="h5 mb-0">Total</span>
+											<span class="h5 mb-0">${{ total }}</span>
+										</li>
+									</ul>
+
+									<!-- Place Order Button -->
+									<a href="#" class="btn btn-lg btn-success" :disabled="!formIsValid"
+										@click.prevent="placeOrder">
+										Place Order
+									</a>
+
+								</div>
+								<!-- Order summary END -->
+							</div>
+						</div><!-- Row End -->
+					</div>
+					<!-- Right sidebar END -->
+
+				</div><!-- Row END -->
+			</div>
+		</section>
+		<!-- 
+        Page content END -->
+
+	</main>
     
 </body>
