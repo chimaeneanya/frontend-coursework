@@ -355,3 +355,34 @@
 </body>
 <div class="back-top"><i class="bi bi-arrow-up-short position-absolute top-50 start-50 translate-middle"></i></div>
 
+<!-- Bootstrap JS -->
+<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+	Vue.createApp({
+		data() {
+			return {
+				showProduct: true, // Toggle between product list and checkout views
+				products: [], // Products fetched from the backend
+				searchQuery: '', // Search input value
+				cart: [], // Items added to the cart
+				sortBy: "title", // Default sorting field
+				sortOrder: "asc", // Default sorting order
+				sortOptions: [
+					{ label: "Subject", value: "title" },
+					{ label: "Location", value: "location" },
+					{ label: "Price", value: "price" },
+					{ label: "Availability", value: "spaces" }
+				],
+				formData: {
+					// Checkout form data
+					name: "",
+					mobile: 0,
+
+				},
+				formIsValid: false // Track form validity
+			};
+		},
+		
+	}).mount('#app');
+</script>
