@@ -33,5 +33,183 @@
     </head>
     
 <body>
+
+    	<!--  MAIN CONTENT START  -->
+	<main v-if="showProduct">
+
+		<!-- 
+      Page Banner START -->
+		
+		<!-- 
+          Page Banner END -->
+
+		<!-- 
+              Page content START -->
+		<section class="py-5">
+			<div class="container">
+				<div class="row">
+					<!-- Right sidebar START -->
+					<div class="col-lg-4 col-xl-3">
+						<!-- Responsive offcanvas body START -->
+						<div class="offcanvas-lg offcanvas-end" tabindex="-1" id="offcanvasSidebar">
+							<div class="offcanvas-header bg-light">
+								<h5 class="offcanvas-title" id="offcanvasNavbarLabel">Advance Filter</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+									data-bs-target="#offcanvasSidebar" aria-label="Close"></button>
+							</div>
+							<div class=" p-3 p-lg-0">
+								<form>
+									<!-- Category START -->
+									<div class="card card-body shadow p-4 mb-4">
+										<!-- Title -->
+										<h4 class="mb-3">Sort By</h4>
+										<!-- Category group -->
+										<div class="col-12">
+											<!-- Sorting Criteria Radios -->
+											<div v-for="(option, index) in sortOptions" :key="index"
+												class="d-flex justify-content-between align-items-center">
+												<div class="form-check">
+													<input class="form-check-input" type="radio" name="sortby"
+														:id="'sortOption' + index" v-model="sortBy"
+														:value="option.value">
+													<label class="form-check-label" :for="'sortOption' + index">{{
+														option.label }}</label>
+												</div>
+											</div>
+
+											<!-- Sort Order Radios -->
+											<div class="d-flex justify-content-between align-items-center">
+												<div class="form-check">
+													<input class="form-check-input" type="radio" name="order"
+														id="ascending" v-model="sortOrder" value="asc">
+													<label class="form-check-label" for="ascending">Ascending</label>
+												</div>
+											</div>
+											<div class="d-flex justify-content-between align-items-center">
+												<div class="form-check">
+													<input class="form-check-input" type="radio" name="order"
+														id="descending" v-model="sortOrder" value="desc">
+													<label class="form-check-label" for="descending">Descending</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- Category END -->
+								</form><!-- Form End -->
+							</div>
+
+						</div>
+						<!-- Responsive offcanvas body END -->
+					</div>
+					<!-- Right sidebar END -->
+
+					<!-- Main content START -->
+					<div class="col-lg-8 col-xl-9">
+
+						<!-- Search option START -->
+						<div class="row mb-4 align-items-center">
+							<!-- Search bar -->
+							<div class="col-xl-6 mx-auto">
+								<form class="border rounded p-2">
+									<div class="input-group input-borderless">
+										<input type="text" v-model="searchQuery" placeholder="Search for products..."
+											class="form-control me-1" />
+										
+									</div>
+								</form>
+							</div>
+						</div>
+						<!-- Search option END -->
+						
+
+						<!-- Course Grid START -->
+						<div class="row g-4">
+
+							<!-- Card item START -->
+							<div v-for="product in filteredAndSortedProducts" :key="product.id"
+								class="col-sm-6 col-xl-4">
+								<div class="card shadow h-100">
+									<!-- Image -->
+									<img v-bind:src="product.image" class="card-img-top" alt="course image">
+									<div class="card-body pb-0">
+										<!-- Badge and favorite -->
+										<div class="d-flex justify-content-between mb-2">
+											<a href="#"
+												class="badge bg-success bg-opacity-10 text-success">{{product.subcat}}</a>
+											<!-- Use product-specific unshowLove for independent toggling -->
+											<a type="button" v-if="product.unshowLove" @click="toggleLove(product)"
+												class="h6 fw-light mb-0">
+												<i class="far fa-heart"></i>
+											</a>
+											<a type="button" v-else @click="toggleLove(product)" class="text-danger">
+												<i class="fas fa-heart"></i>
+											</a>
+										</div>
+										<!-- Title -->
+										<h5 class="card-title"><a href="#">{{product.title}} </a></h5>
+										<p class="mb-2 text-truncate-2"><strong>Location: </strong>{{product.location}}
+										</p>
+										<!-- Rating star -->
+										<ul class="list-inline d-flex justify-content-between mb-0">
+											<div>
+												<li v-for="n in product.rating" class="list-inline-item me-0 small">
+													<i class="fas fa-star text-warning"></i>
+												</li>
+												<li v-for="n in 5 - product.rating" class="list-inline-item me-0 small">
+													<i class="far fa-star text-warning"></i>
+												</li>
+											</div>
+											<div>
+												<li class="list-inline-item ms-2 h6 fw-light mb-0">£{{product.price}}
+												</li>
+											</div>
+										</ul>
+									</div>
+									<!-- Card footer -->
+									<div class="card-footer pt-0 pb-3">
+										<hr>
+										<div class="d-flex justify-content-between">
+
+											<button v-if="itemsLimit(product)" @click="addToCart(product)" type="button"
+												class="btn btn-outline-primary">Add to cart</button>
+											<button v-else class="btn btn-outline-primary" disabled>Add
+												to cart</button>
+
+											<span v-if="itemsLeft(product) === 0" class="h6 fw-light mb-0">
+												<i class="fas fa-book mt-3 text-orange me-2"></i>
+												All Out!
+											</span>
+											<span v-else-if="itemsLeft(product) < 5" class="h6 fw-light mb-0">
+												<i class="fas fa-book mt-3 text-orange me-2"></i>
+												Only {{itemsLeft(product)}} Left!
+											</span>
+											<span v-else class="h6 fw-light mb-0">
+												<i class="fas fa-book mt-3 text-orange me-2"></i>
+												<!-- {{product.spaces}} Lectures -->
+												{{itemsLeft(product)}} Lectures
+												<!-- Buy Now! -->
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Card item END -->
+							<!-- Show "No Results Found" if no products match -->
+							<div v-if="filteredAndSortedProducts.length === 0" class="col-12 text-center">
+								<p class="text-danger">No results found for "{{ searchQuery }}".</p>
+							</div>
+
+						</div>
+						<!-- Course Grid END -->
+
+					</div>
+					<!-- Main content END -->
+
+
+				</div><!-- Row END -->
+			</div>
+		</section>
+	</main>
+	<!--  MAIN CONTENT END  -->
     
 </body>
